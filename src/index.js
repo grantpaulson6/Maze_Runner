@@ -10,4 +10,5 @@ window.addEventListener('load', () => {
     // canvas.style.height = "1000px";
 
     new Game(canvas);
+
 });

@@ -12,3 +12,4 @@ window.addEventListener('load', () => {
     new Game(canvas);
 
 });
+

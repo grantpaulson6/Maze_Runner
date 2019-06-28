@@ -5,21 +5,26 @@ class Game {
 
     constructor(canvas) {
         this.ctx = canvas.getContext('2d');
-        this.maze = new Maze(this.ctx);
+        // this.maze = new Maze(this.ctx);
 
         const playerImage = new Image();
+        // playerImage.src = "https://cdn.pixabay.com/photo/2014/01/05/01/19/dragon-238931__340.jpg";
         playerImage.src = "../sprite_sheets/indianajones_whip.png";
-        playerImage.width = 128;
-        playerImage.height = 192;
-        document.getElementById('test').appendChild(playerImage);
-        const player = new Sprite({
-            ctx: this.ctx,
-            width: 50,
-            height: 50,
-            image: playerImage
-        });
+        // playerImage.width = 128;
+        // playerImage.height = 192;
+        // document.getElementById('test').appendChild(playerImage);
+        // const player = new Sprite({
+        //     ctx: this.ctx,
+        //     width: 50,
+        //     height: 50,
+        //     image: playerImage
+        // });
         // this.drawMaze();
-        player.render();
+        // player.render();
+        playerImage.onload = () => {
+
+            this.ctx.drawImage(playerImage,0,0);
+        }
     }
 
         drawMaze() {

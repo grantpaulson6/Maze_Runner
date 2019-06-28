@@ -15,7 +15,7 @@ class Sprite {
         this.m = 0;
         // this.oreintation('l');
         this.tickCount = 0;
-        this.speed = 1.5;
+        this.speed = 2;
     }
 
     update(keys) {
@@ -42,7 +42,9 @@ class Sprite {
                 this.m = 2;
                 this.sy = this.m * this.height;
             }
-            this.dx += this.speed;
+            if (this.dx != 200) {
+                this.dx += this.speed;
+            }
         }
 
         if (keys[40]) {

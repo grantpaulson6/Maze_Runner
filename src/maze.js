@@ -27,11 +27,17 @@ class Maze {
         this.nextNode(this.rootNode, visited,0);
         this.hWallsArray = [];
         this.vWallsArray = [];
+        this.hWallsHash = {};
+        this.vWallsHash = {};
         for (let v of this.hWalls.values()) {
-            this.hWallsArray.push(v.split('').map(e=>parseInt(e)));
+            v = v.split('').map(e => parseInt(e));
+            this.hWallsArray.push(v);
+            this.hWallsHash[v[0]] = v[1];
         }
         for (let v of this.vWalls.values()) {
-            this.vWallsArray.push(v.split('').map(e=>parseInt(e)));
+            v = v.split('').map(e => parseInt(e));
+            this.vWallsArray.push(v);
+            this.vWallsHash[v[1]] = v[0];
         }
         // console.log(this.vWallsArray.length,this.hWallsArray.length)
         console.log(this.last);

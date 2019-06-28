@@ -15,7 +15,9 @@ class Game {
             ctx: this.ctx,
             width: 32,
             height: 48,
-            image: playerImage
+            image: playerImage,
+            hWalls: this.maze.hWallsHash,
+            vWalls: this.maze.vWallsHash
         });
         this.keys = {};
         window.addEventListener('keydown', e => {

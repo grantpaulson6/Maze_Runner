@@ -29,16 +29,34 @@ class Maze {
         this.vWallsArray = [];
         this.hWallsHash = {};
         this.vWallsHash = {};
+        let vert;
+        let hori;
         for (let v of this.hWalls.values()) {
             v = v.split('').map(e => parseInt(e));
             this.hWallsArray.push(v);
-            this.hWallsHash[v[0]] = v[1];
+            vert = (v[0]+1)*50+25;
+            hori = [v[1]*50 + 25, (v[1]+1)*50 + 25];
+            if (this.hWallsHash[vert]) {
+                this.hWallsHash[vert].push(hori);
+            } else {
+                this.hWallsHash[vert] = [hori];
+            }
         }
         for (let v of this.vWalls.values()) {
             v = v.split('').map(e => parseInt(e));
             this.vWallsArray.push(v);
-            this.vWallsHash[v[1]] = v[0];
+            vert = [v[0] * 50 + 25, (v[0] + 1) * 50 + 25];
+            hori = (v[1] + 1) * 50 + 25;
+            if (this.vWallsHash[hori]) {
+                this.vWallsHash[hori].push(vert);
+            } else {
+                this.vWallsHash[hori] = [vert];
+            }
         }
+
+        // left and top outer walls need to be added
+
+        
         // console.log(this.vWallsArray.length,this.hWallsArray.length)
         console.log(this.last);
     }

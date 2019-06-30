@@ -7,11 +7,12 @@ class Sprite {
         this.width = options.width;
         this.height = options.height;
         this.image = options.image;
-
+        this.hWalls = options.hWalls;
+        this.vWalls = options.vWalls;
         this.sx = 0;
         this.sy = 0;
-        this.dx = 0;
-        this.dy = 0;
+        this.dx = 25;
+        this.dy = 25;
         this.m = 0;
         // this.oreintation('l');
         this.tickCount = 0;
@@ -36,31 +37,35 @@ class Sprite {
                 this.sy = this.m * this.height;
             }
             this.dy -= this.speed;
+            this.checkWall('u');
         }
         if (keys[39]) {
             if (this.m != 2) {
                 this.m = 2;
                 this.sy = this.m * this.height;
             }
-            if (this.dx != 200) {
+            // if (this.dx != 200) {
                 this.dx += this.speed;
+                this.checkWall('r');
+                // }
             }
-        }
-
-        if (keys[40]) {
-            if (this.m != 0) {
-                this.m = 0;
-                this.sy = this.m * this.height;
+            
+            if (keys[40]) {
+                if (this.m != 0) {
+                    this.m = 0;
+                    this.sy = this.m * this.height;
+                }
+                this.dy += this.speed;
+                this.checkWall('d');
             }
-            this.dy += this.speed;
-        }
-
-        if (keys[37]) {
-            if (this.m != 1) {
-                this.m = 1;
-                this.sy = this.m * this.height;
-            }
-            this.dx -= this.speed;                               
+            
+            if (keys[37]) {
+                if (this.m != 1) {
+                    this.m = 1;
+                    this.sy = this.m * this.height;
+                }
+                this.dx -= this.speed;                               
+                this.checkWall('l');
         }
 
         if (keys[37] || keys[38] || keys[39] || keys[40]) {
@@ -70,11 +75,54 @@ class Sprite {
                 if (this.sx == this.width * 4) this.sx = 0;
             }
         } else {
-            if (this.width * 4 % this.sx % 2 == 0) {
-                this.sx = 0;
-            }
+            // standing position when not moving
+            if (this.width * 4 % this.sx % 2 == 0) this.sx = 0;
         }
-    
+        // debugger
+        // this.checkWall();
+    }
+
+    checkWall(d) {
+        // debugger
+        console.log(this.dx)
+        switch (d) {
+            case 'r':
+                if (this.vWalls[this.dx+this.width]) {
+                    for (let wx of this.vWalls[this.dx + this.width]) {
+                        if (this.dy+this.height >= wx[0] && this.dy+this.height <= wx[1]) {
+                            this.dx -= this.speed;
+                        }
+                    }
+                }
+                return;
+            case 'l':
+                if (this.vWalls[this.dx]) {
+                    for (let wx of this.vWalls[this.dx]) {
+                        if (this.dy+this.height >= wx[0] && this.dy+this.height <= wx[1]) {
+                            this.dx += this.speed;
+                        }
+                    }
+                }
+                return;
+            case 'u':
+                if (this.hWalls[this.dy+ this.height]) {
+                    for (let wy of this.hWalls[this.dy + this.height]) {
+                        if (this.dx+this.width >= wy[0] && this.dx <= wy[1]) {
+                            this.dy += this.speed;
+                        }
+                    }
+                }
+                return;
+            case 'd':
+                if (this.hWalls[this.dy + this.height]) {
+                    for (let wy of this.hWalls[this.dy + this.height]) {
+                        if (this.dx + this.width >= wy[0] && this.dx <= wy[1]) {
+                            this.dy -= this.speed;
+                        }
+                    }
+                }
+                return;
+        }
     }
 
     render() {

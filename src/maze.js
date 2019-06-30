@@ -54,11 +54,19 @@ class Maze {
             }
         }
 
+        this.vWallsHash[25] = []
+        this.hWallsHash[25] = []
+        for (let i = 0; i < 10; i++) {
+            this.vWallsHash[25].push([25 + 50 * i, 25 + 50 * (i + 1)]);
+            this.hWallsHash[25].push([25 + 50 * i, 25 + 50 * (i + 1)]);
+        }
+
         // left and top outer walls need to be added
 
         
         // console.log(this.vWallsArray.length,this.hWallsArray.length)
-        console.log(this.last);
+        // console.log(this.last);
+        this.rotateClockwiseBit();
     }
 
     nextNode(node, visited,d) {
@@ -118,6 +126,74 @@ class Maze {
             array[i] = array[j];
             array[j] = temp;
         }
+    }
+
+    rotateClockwise() {
+        this.vWallsHash2 = {};
+        this.hWallsHash2 = {};
+        for (let y of Object.keys(this.hWallsHash)) {
+            for (let x of this.hWallsHash[y]) {
+                if (this.vWallsHash2[525-y]) {
+                    this.vWallsHash2[525 - y].push(x);
+                } else {
+                    this.vWallsHash2[525 - y] = [x];
+                }
+            }
+        }
+        for (let x of Object.keys(this.vWallsHash)) {
+            for (let y of this.vWallsHash[x]) {
+                if (this.hWallsHash2[x]) {
+                    this.hWallsHash2[x].push(y.map(e=>525-e));
+                } else {
+                    this.hWallsHash2[x] = [y.map(e => 525 - e)];
+                }
+            }
+        }
+    }
+
+    rotateClockwiseBit() {
+        this.transitionWalls = [];
+        let theta;
+        let r;
+        for (let y of Object.keys(this.hWallsHash)) {
+            for (let ax of this.hWallsHash[y]) {
+                let wall = []
+                ax.forEach( x => {
+                    let yi = y - 275;
+                    let xi = x - 275;
+                    let theta = Math.atan(yi/xi) - Math.PI/4;
+                    let r = Math.sqrt(xi**2 + yi**2);
+    
+                    yi = r * Math.sin(theta);
+                    xi = r * Math.cos(theta);
+
+                    xi += 275;
+                    yi += 275;
+    
+                    wall.push([xi,yi]);
+                });
+                this.transitionWalls.push(wall);
+            }
+        }
+        // for (let x of Object.keys(this.vWallsHash)) {
+        //     for (let y of this.vWallsHash[x]) {
+        //         y.forEach( yi => {
+        //             let xi = x - 275;
+        //             yi -= 275;
+        //             let theta = Math.tan(yi/xi) - Math.PI/4;
+        //             let r = Math.sqrt(yi**2 + xi**2);
+    
+        //             yi = r * Math.sin(theta);
+        //             xi = r * Math.cos(theta);
+
+        //             xi += 275;
+        //             yi += 275;
+                    
+        //             this.transitionWalls.push([xi, yi]);
+        //         });
+        //     }
+        // }
+        console.log(this.transitionWalls)
     }
 }
 

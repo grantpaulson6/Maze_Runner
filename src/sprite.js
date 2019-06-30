@@ -105,8 +105,8 @@ class Sprite {
                 }
                 return;
             case 'u':
-                if (this.hWalls[this.dy+ this.height]) {
-                    for (let wy of this.hWalls[this.dy + this.height]) {
+                if (this.hWalls[this.dy+ this.height - 20]) {
+                    for (let wy of this.hWalls[this.dy + this.height - 20]) {
                         if (this.dx+this.width >= wy[0] && this.dx <= wy[1]) {
                             this.dy += this.speed;
                         }

@@ -66,7 +66,7 @@ class Maze {
         
         // console.log(this.vWallsArray.length,this.hWallsArray.length)
         // console.log(this.last);
-        this.rotateClockwiseBit();
+        this.rotateClockwiseBit(Math.PI/8);
     }
 
     nextNode(node, visited,d) {
@@ -151,7 +151,7 @@ class Maze {
         }
     }
 
-    rotateClockwiseBit() {
+    rotateClockwiseBit(rad) {
         this.transitionWalls = [];
         let theta;
         let r;
@@ -161,7 +161,8 @@ class Maze {
                 ax.forEach( x => {
                     let yi = y - 275;
                     let xi = x - 275;
-                    let theta = Math.atan(yi/xi) - Math.PI/4;
+                    if (xi == 0) xi = 0.00000001;
+                    let theta = Math.atan2(yi,xi) - rad;
                     let r = Math.sqrt(xi**2 + yi**2);
     
                     yi = r * Math.sin(theta);
@@ -175,24 +176,31 @@ class Maze {
                 this.transitionWalls.push(wall);
             }
         }
-        // for (let x of Object.keys(this.vWallsHash)) {
-        //     for (let y of this.vWallsHash[x]) {
-        //         y.forEach( yi => {
-        //             let xi = x - 275;
-        //             yi -= 275;
-        //             let theta = Math.tan(yi/xi) - Math.PI/4;
-        //             let r = Math.sqrt(yi**2 + xi**2);
+        for (let x of Object.keys(this.vWallsHash)) {
+            for (let y of this.vWallsHash[x]) {
+                let wall = []
+                y.forEach( yi => {
+                    // if (yi > 270 && x < 250) debugger;
+                    let xi = x - 275;
+                    if (xi == 0) xi = 0.00000001;
+                    yi -= 275;
+                    // yi *= -1;
+                    let theta = Math.atan2(yi,xi) - rad// - Math.PI/4;
+                    // theta 
+                    // if (theta > 0) theta = yi > 0 ? theta : theta - Math.PI;
+                    // if (theta < 0) theta = xi > 0 ? theta : theta - Math.PI;
+                    let r = Math.sqrt(yi**2 + xi**2);
     
-        //             yi = r * Math.sin(theta);
-        //             xi = r * Math.cos(theta);
+                    yi =  r * Math.sin(theta);
+                    xi = r * Math.cos(theta);
 
-        //             xi += 275;
-        //             yi += 275;
-                    
-        //             this.transitionWalls.push([xi, yi]);
-        //         });
-        //     }
-        // }
+                    xi += 275;
+                    yi += 275;
+                    wall.push([xi, yi]);
+                });
+                this.transitionWalls.push(wall);
+            }
+        }
         console.log(this.transitionWalls)
     }
 }

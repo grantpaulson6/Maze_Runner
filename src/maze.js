@@ -66,7 +66,8 @@ class Maze {
         
         // console.log(this.vWallsArray.length,this.hWallsArray.length)
         // console.log(this.last);
-        this.rotateClockwiseBit(Math.PI/8);
+        this.rotateClockwiseBit(0);
+        // this.rotateClockwiseBit(Math.PI/8);
     }
 
     nextNode(node, visited,d) {

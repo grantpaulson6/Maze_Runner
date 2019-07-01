@@ -11,8 +11,10 @@ class Sprite {
         this.vWalls = options.vWalls;
         this.sx = 0;
         this.sy = 0;
-        this.dx = 25;
-        this.dy = 25;
+        this.dx = 27;
+        this.dy = 27;
+        this.dxR = 27;
+        this.dyR = 27;
         this.m = 0;
         // this.oreintation('l');
         this.tickCount = 0;
@@ -30,43 +32,7 @@ class Sprite {
     }
 
     move(keys) {
-        this.tickCount += 1
-        if (keys[38]) {
-            if (this.m != 3) {
-                this.m = 3;
-                this.sy = this.m * this.height;
-            }
-            this.dy -= this.speed;
-            this.checkWall('u');
-        }
-        if (keys[39]) {
-            if (this.m != 2) {
-                this.m = 2;
-                this.sy = this.m * this.height;
-            }
-            // if (this.dx != 200) {
-                this.dx += this.speed;
-                this.checkWall('r');
-                // }
-            }
-            
-            if (keys[40]) {
-                if (this.m != 0) {
-                    this.m = 0;
-                    this.sy = this.m * this.height;
-                }
-                this.dy += this.speed;
-                this.checkWall('d');
-            }
-            
-            if (keys[37]) {
-                if (this.m != 1) {
-                    this.m = 1;
-                    this.sy = this.m * this.height;
-                }
-                this.dx -= this.speed;                               
-                this.checkWall('l');
-        }
+        this.tickCount += 1;
 
         if (keys[37] || keys[38] || keys[39] || keys[40]) {
             if (this.tickCount > 8) {
@@ -78,13 +44,68 @@ class Sprite {
             // standing position when not moving
             if (this.width * 4 % this.sx % 2 == 0) this.sx = 0;
         }
+
+        
+        if (keys[38]) {
+            if (this.m != 3) {
+                this.m = 3;
+                this.sy = this.m * this.height;
+            }
+            this.dy -= this.speed;
+            if (this.checkPoint()) this.dy += this.speed;
+            else this.checkWall('u');
+        }
+        if (keys[39]) {
+            if (this.m != 2) {
+                this.m = 2;
+                this.sy = this.m * this.height;
+            }
+            // if (this.dx != 200) {
+                this.dx += this.speed;
+            if (this.checkPoint()) this.dx -= this.speed;
+                else this.checkWall('r');
+                // }
+            }
+            
+            if (keys[40]) {
+                if (this.m != 0) {
+                    this.m = 0;
+                    this.sy = this.m * this.height;
+                }
+                this.dy += this.speed;
+                if (this.checkPoint()) this.dy -= this.speed;
+                else this.checkWall('d');
+            }
+            
+            if (keys[37]) {
+                if (this.m != 1) {
+                    this.m = 1;
+                    this.sy = this.m * this.height;
+                }
+                this.dx -= this.speed;       
+                if (this.checkPoint()) this.dx += this.speed;                        
+                else this.checkWall('l');
+        }
+
+        // this.rotate(Math.PI/8);
+        this.rotate(0);
+        // console.log(this.dxR, this.dyR)
         // debugger
         // this.checkWall();
     }
 
+    checkPoint() {
+        // debugger
+        let gridX1 = (this.dx - 25) / 50;
+        let gridX2 = (this.dx + this.width - 25) / 50;
+        let gridY1 = (this.dy + this.height - 20 - 25) / 50;
+        let gridY2 = (this.dy + this. height - 25) / 50;
+        return Math.floor(gridY2) === Math.ceil(gridY1) && Math.floor(gridX2) === Math.ceil(gridX1);
+    }
+
     checkWall(d) {
         // debugger
-        console.log(this.dx)
+
         switch (d) {
             case 'r':
                 if (this.vWalls[this.dx+this.width]) {
@@ -125,6 +146,20 @@ class Sprite {
         }
     }
 
+    rotate(rad) {
+        let yi = this.dy - 275 + this.height;
+        let xi = this.dx - 275 + this.width/2;
+        if (xi == 0) xi = 0.00000001;
+        let theta = Math.atan2(yi, xi) - rad;
+        let r = Math.sqrt(xi ** 2 + yi ** 2);
+
+        yi = r * Math.sin(theta);
+        xi = r * Math.cos(theta);
+
+        this.dyR = yi + 275 - this.height;
+        this.dxR = xi + 275 - this.width/2;
+    }
+
     render() {
         // console.log('here')
         // this.ctx.rect(10,10,60,60);
@@ -137,8 +172,8 @@ class Sprite {
             this.sy,
             this.width,
             this.height,
-            this.dx,
-            this.dy,
+            this.dxR,
+            this.dyR,
             this.width,
             this.height
         );

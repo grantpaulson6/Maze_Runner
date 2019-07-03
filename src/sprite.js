@@ -11,10 +11,10 @@ class Sprite {
         this.vWalls = options.vWalls;
         this.sx = 0;
         this.sy = 0;
-        this.dx = 27;
-        this.dy = 27;
-        this.dxR = 27;
-        this.dyR = 27;
+        this.dx = 25;
+        this.dy = 25;
+        this.dxR = 25;
+        this.dyR = 25;
         this.m = 0;
         // this.oreintation('l');
         this.tickCount = 0;
@@ -95,16 +95,16 @@ class Sprite {
         let dir = [0,2,3,1];
         //rotate offset by pi/4
         // debugger
-        let offset = Math.floor(2* (Math.abs(this.rotateRad+Math.PI/4) % (Math.PI *2))/ Math.PI);
+        let offset = Math.floor(2* ((this.rotateRad+Math.PI/4) % (Math.PI *2))/ Math.PI);
         switch(this.m) {
             case 1:
-                return dir[(3+offset) % 4];
+                return dir[(3+offset >= 0 ? 3 + offset : 4 + 3 + offset) % 4];
             case 0:
-                return dir[(offset) % 4];
+                return dir[(offset >= 0 ? offset : 4 + offset) % 4];
             case 2:
-                return dir[(1+offset) % 4];
+                return dir[(1 + offset >= 0 ? 1 + offset : 4 + 1 + offset) % 4];
             case 3:
-                return dir[(2+offset) % 4];
+                return dir[(2 + offset >= 0 ? 2 + offset : 4 + 2 + offset) % 4];
         }
     }
 
@@ -175,7 +175,7 @@ class Sprite {
 
     render() {
         this.rotate(this.rotateRad);
-        this.rotateRad += Math.PI / 800;
+        this.rotateRad -= Math.PI / 800;
         // console.log('here')
         // this.ctx.rect(10,10,60,60);
         // this.ctx.fill();

@@ -96,7 +96,7 @@ class Game {
         // let drawer = 
         this.ctx.beginPath();
         // let i = 0;
-        this.maze.rotateRad += Math.PI/800;
+        this.maze.rotateRad -= Math.PI/800;
         this.maze.rotateClockwiseBit();
         for (let c of this.maze.transitionWalls) {
 

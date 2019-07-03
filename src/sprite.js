@@ -11,10 +11,10 @@ class Sprite {
         this.vWalls = options.vWalls;
         this.sx = 0;
         this.sy = 0;
-        this.dx = 25;
-        this.dy = 25;
-        this.dxR = 25;
-        this.dyR = 25;
+        this.dx = 27;
+        this.dy = 23;
+        this.dxR = 27;
+        this.dyR = 23;
         this.m = 0;
         // this.oreintation('l');
         this.tickCount = 0;
@@ -110,9 +110,9 @@ class Sprite {
     }
 
     checkPoint() {
-        let gridX1 = (this.dx - 25) / 50;
-        let gridX2 = (this.dx + this.width - 25) / 50;
-        let gridY1 = (this.dy + this.height - 20 - 25) / 50;
+        let gridX1 = (this.dx + 8 - 25) / 50;
+        let gridX2 = (this.dx + this.width - 8 - 25) / 50;
+        let gridY1 = (this.dy + this.height - 16 - 25) / 50;
         let gridY2 = (this.dy + this. height - 25) / 50;
         return Math.floor(gridY2) === Math.ceil(gridY1) && Math.floor(gridX2) === Math.ceil(gridX1);
     }
@@ -120,27 +120,30 @@ class Sprite {
     checkWall(d) {
         switch (d) {
             case 'r':
-                if (this.vWalls[this.dx+this.width]) {
-                    for (let wx of this.vWalls[this.dx + this.width]) {
-                        if (this.dy+this.height >= wx[0] && this.dy+this.height <= wx[1]) {
+                if (this.vWalls[this.dx+this.width - 8]) {
+                    for (let wx of this.vWalls[this.dx + this.width - 8]) {
+                        if ((this.dy+this.height >= wx[0] && this.dy+this.height <= wx[1])||
+                            (this.dy + this.height - 16 >= wx[0] && this.dy + this.height - 16 <= wx[1])) {
                             this.dx -= this.speed;
                         }
                     }
                 }
                 return;
             case 'l':
-                if (this.vWalls[this.dx]) {
-                    for (let wx of this.vWalls[this.dx]) {
-                        if (this.dy+this.height >= wx[0] && this.dy+this.height <= wx[1]) {
+                if (this.vWalls[this.dx + 8]) {
+                    for (let wx of this.vWalls[this.dx + 8]) {
+                        if ((this.dy + this.height >= wx[0] && this.dy + this.height <= wx[1]) ||
+                            (this.dy + this.height - 16 >= wx[0] && this.dy + this.height - 16 <= wx[1])) {
                             this.dx += this.speed;
                         }
                     }
                 }
                 return;
             case 'u':
-                if (this.hWalls[this.dy+ this.height - 20]) {
-                    for (let wy of this.hWalls[this.dy + this.height - 20]) {
-                        if (this.dx+this.width >= wy[0] && this.dx <= wy[1]) {
+                if (this.hWalls[this.dy+ this.height - 16]) {
+                    for (let wy of this.hWalls[this.dy + this.height - 16]) {
+                        if ((this.dx+this.width - 8 >= wy[0] && this.dx + this.width - 8 <= wy[1]) ||
+                            (this.dx + 8 >= wy[0] && this.dx + 8 <= wy[1])) {
                             this.dy += this.speed;
                         }
                     }
@@ -149,7 +152,8 @@ class Sprite {
             case 'd':
                 if (this.hWalls[this.dy + this.height]) {
                     for (let wy of this.hWalls[this.dy + this.height]) {
-                        if (this.dx + this.width >= wy[0] && this.dx <= wy[1]) {
+                        if ((this.dx + this.width - 8 >= wy[0] && this.dx + this.width - 8 <= wy[1]) ||
+                            (this.dx + 8 >= wy[0] && this.dx + 8 <= wy[1])) {
                             this.dy -= this.speed;
                         }
                     }
@@ -159,7 +163,7 @@ class Sprite {
     }
 
     rotate(rad) {
-        let yi = this.dy - 275 + this.height - 10;
+        let yi = this.dy - 275 + this.height - 8;
         let xi = this.dx - 275 + this.width/2;
         if (xi == 0) xi = 0.00000001;
         let theta = Math.atan2(yi, xi) - rad;

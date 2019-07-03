@@ -66,7 +66,8 @@ class Maze {
         
         // console.log(this.vWallsArray.length,this.hWallsArray.length)
         // console.log(this.last);
-        this.rotateClockwiseBit(0);
+        this.rotateRad = 0;
+        // this.rotateClockwiseBit(this.rotateRad);
         // this.rotateClockwiseBit(Math.PI/8);
     }
 
@@ -152,7 +153,7 @@ class Maze {
         }
     }
 
-    rotateClockwiseBit(rad) {
+    rotateClockwiseBit() {
         this.transitionWalls = [];
         let theta;
         let r;
@@ -163,7 +164,7 @@ class Maze {
                     let yi = y - 275;
                     let xi = x - 275;
                     if (xi == 0) xi = 0.00000001;
-                    let theta = Math.atan2(yi,xi) - rad;
+                    let theta = Math.atan2(yi,xi) - this.rotateRad;
                     let r = Math.sqrt(xi**2 + yi**2);
     
                     yi = r * Math.sin(theta);
@@ -186,7 +187,7 @@ class Maze {
                     if (xi == 0) xi = 0.00000001;
                     yi -= 275;
                     // yi *= -1;
-                    let theta = Math.atan2(yi,xi) - rad// - Math.PI/4;
+                    let theta = Math.atan2(yi,xi) - this.rotateRad;// - Math.PI/4;
                     // theta 
                     // if (theta > 0) theta = yi > 0 ? theta : theta - Math.PI;
                     // if (theta < 0) theta = xi > 0 ? theta : theta - Math.PI;

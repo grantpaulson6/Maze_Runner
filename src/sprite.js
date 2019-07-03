@@ -18,6 +18,7 @@ class Sprite {
         this.m = 0;
         // this.oreintation('l');
         this.tickCount = 0;
+        this.rotateRad = 0;
         this.speed = 2;
     }
 
@@ -33,6 +34,7 @@ class Sprite {
 
     move(keys) {
         this.tickCount += 1;
+    
 
         if (keys[37] || keys[38] || keys[39] || keys[40]) {
             if (this.tickCount > 8) {
@@ -49,7 +51,7 @@ class Sprite {
         if (keys[38]) {
             if (this.m != 3) {
                 this.m = 3;
-                this.sy = this.m * this.height;
+                // this.sy = this.m * this.height;
             }
             this.dy -= this.speed;
             if (this.checkPoint()) this.dy += this.speed;
@@ -58,44 +60,55 @@ class Sprite {
         if (keys[39]) {
             if (this.m != 2) {
                 this.m = 2;
-                this.sy = this.m * this.height;
+                // this.sy = this.m * this.height;
             }
-            // if (this.dx != 200) {
-                this.dx += this.speed;
+            this.dx += this.speed;
             if (this.checkPoint()) this.dx -= this.speed;
-                else this.checkWall('r');
-                // }
-            }
-            
-            if (keys[40]) {
-                if (this.m != 0) {
-                    this.m = 0;
-                    this.sy = this.m * this.height;
-                }
-                this.dy += this.speed;
-                if (this.checkPoint()) this.dy -= this.speed;
-                else this.checkWall('d');
-            }
-            
-            if (keys[37]) {
-                if (this.m != 1) {
-                    this.m = 1;
-                    this.sy = this.m * this.height;
-                }
-                this.dx -= this.speed;       
-                if (this.checkPoint()) this.dx += this.speed;                        
-                else this.checkWall('l');
+            else this.checkWall('r');
         }
+            
+        if (keys[40]) {
+            if (this.m != 0) {
+                this.m = 0;
+                // this.sy = this.m * this.height;
+            }
+            this.dy += this.speed;
+            if (this.checkPoint()) this.dy -= this.speed;
+            else this.checkWall('d');
+        }
+        
+        if (keys[37]) {
+            if (this.m != 1) {
+                this.m = 1;
+                // this.sy = this.m * this.height;
+            }
+            this.dx -= this.speed;       
+            if (this.checkPoint()) this.dx += this.speed;                        
+            else this.checkWall('l');
+        }
+        this.sy = this.orientate() * this.height;
+    }
 
-        // this.rotate(Math.PI/8);
-        this.rotate(0);
-        // console.log(this.dxR, this.dyR)
+    orientate() {
         // debugger
-        // this.checkWall();
+        //counter clockwise is positive radian or this.rotateRad
+        let dir = [0,2,3,1];
+        //rotate offset by pi/4
+        // debugger
+        let offset = Math.floor(2* (Math.abs(this.rotateRad+Math.PI/4) % (Math.PI *2))/ Math.PI);
+        switch(this.m) {
+            case 1:
+                return dir[(3+offset) % 4];
+            case 0:
+                return dir[(offset) % 4];
+            case 2:
+                return dir[(1+offset) % 4];
+            case 3:
+                return dir[(2+offset) % 4];
+        }
     }
 
     checkPoint() {
-        // debugger
         let gridX1 = (this.dx - 25) / 50;
         let gridX2 = (this.dx + this.width - 25) / 50;
         let gridY1 = (this.dy + this.height - 20 - 25) / 50;
@@ -147,7 +160,7 @@ class Sprite {
     }
 
     rotate(rad) {
-        let yi = this.dy - 275 + this.height;
+        let yi = this.dy - 275 + this.height - 10;
         let xi = this.dx - 275 + this.width/2;
         if (xi == 0) xi = 0.00000001;
         let theta = Math.atan2(yi, xi) - rad;
@@ -156,11 +169,13 @@ class Sprite {
         yi = r * Math.sin(theta);
         xi = r * Math.cos(theta);
 
-        this.dyR = yi + 275 - this.height;
+        this.dyR = yi + 275 - this.height + 10;
         this.dxR = xi + 275 - this.width/2;
     }
 
     render() {
+        this.rotate(this.rotateRad);
+        this.rotateRad += Math.PI / 800;
         // console.log('here')
         // this.ctx.rect(10,10,60,60);
         // this.ctx.fill();

@@ -19,6 +19,7 @@ class Sprite {
         // this.oreintation('l');
         this.tickCount = 0;
         this.rotateRad = 0;
+        this.targetRad = 0;
         this.speed = 2;
     }
 
@@ -117,8 +118,6 @@ class Sprite {
     }
 
     checkWall(d) {
-        // debugger
-
         switch (d) {
             case 'r':
                 if (this.vWalls[this.dx+this.width]) {
@@ -175,12 +174,13 @@ class Sprite {
 
     render() {
         this.rotate(this.rotateRad);
-        this.rotateRad -= Math.PI / 800;
-        // console.log('here')
-        // this.ctx.rect(10,10,60,60);
-        // this.ctx.fill();
-        // document.getElementById('test').appendChild(this.image);
-        // let image = this.image;
+        if (this.rotateRad.toFixed(6) != this.targetRad.toFixed(6)) {
+            if (this.rotateRad > this.targetRad) {
+                this.rotateRad -= Math.PI / 800;
+            } else {
+                this.rotateRad += Math.PI / 800;
+            }
+        }
         this.ctx.drawImage(
             this.image,
             this.sx,

@@ -9,8 +9,6 @@ class Game {
 
         const playerImage = new Image();
         playerImage.src = "../sprite_sheets/indianajones_whip.png";
-        // playerImage.width = 128;
-        // playerImage.height = 192;
         this.player = new Sprite({
             ctx: this.ctx,
             width: 32,
@@ -19,84 +17,95 @@ class Game {
             hWalls: this.maze.hWallsHash,
             vWalls: this.maze.vWallsHash
         });
+
         this.keys = {};
+
         window.addEventListener('keydown', e => {
-            // console.log(e.keyCode)
-            // this.player.move(e.keyCode);
             this.keys[e.keyCode] = true;
-        })
+        });
 
         window.addEventListener('keyup', e => {
-            // console.log(e.keyCode)
-            // this.player.move(e.keyCode);
             this.keys[e.keyCode] = false;
-        })
-        // this.drawMaze();
-        // playerImage.onload = () => {
-            // player.render();
-            // this.ctx.drawImage(playerImage,0,0);
-            window.requestAnimationFrame(this.animate.bind(this));
-        // }
+        });
+
+        window.requestAnimationFrame(this.animate.bind(this));
+
+        window.setTimeout(this.rotate.bind(this), 3000)
+    }
+
+    rotate() {
+        let p = Math.PI/2;
+        // [-3*p, -2*p, -p, p, 2*p, 3*p];
+        let rad = [-2*p, -p, p, 2*p][Math.floor(Math.random()*4)];
+        this.player.targetRad = rad;
+        this.maze.targetRad = rad;
+        window.setTimeout(this.rotate.bind(this), 10000);
     }
 
     animate() {
         this.ctx.clearRect(0,0,550,550)
         this.player.update(this.keys);
-        this.drawMaze3();
+        this.maze.drawMaze();
         this.player.render();
         window.requestAnimationFrame(this.animate.bind(this));
     }
 
-    drawMaze2() {
-        this.ctx.beginPath();
-        for (let l of this.maze.hWallsArray) {
-            // console.log(l[0],l[1]);
-            this.ctx.moveTo(l[1] * 50 + 25, (l[0] + 1) * 50 + 25);
-            this.ctx.lineTo((l[1] + 1) * 50 + 25, (l[0] + 1) * 50 + 25);
-        }
-        // console.log('verts')
-        for (let l of this.maze.vWallsArray) {
-            // console.log(l[0],l[1]);
-            this.ctx.moveTo((l[1] + 1) * 50 + 25, l[0] * 50 + 25);
-            this.ctx.lineTo((l[1] + 1) * 50 + 25, (l[0] + 1) * 50 + 25);
-        }
-        // this.ctx.stroke();
-        // this.ctx.beginPath();
+    // drawMaze2() {
+    //     this.ctx.beginPath();
+    //     for (let l of this.maze.hWallsArray) {
+    //         // console.log(l[0],l[1]);
+    //         this.ctx.moveTo(l[1] * 50 + 25, (l[0] + 1) * 50 + 25);
+    //         this.ctx.lineTo((l[1] + 1) * 50 + 25, (l[0] + 1) * 50 + 25);
+    //     }
+    //     // console.log('verts')
+    //     for (let l of this.maze.vWallsArray) {
+    //         // console.log(l[0],l[1]);
+    //         this.ctx.moveTo((l[1] + 1) * 50 + 25, l[0] * 50 + 25);
+    //         this.ctx.lineTo((l[1] + 1) * 50 + 25, (l[0] + 1) * 50 + 25);
+    //     }
+    //     // this.ctx.stroke();
+    //     // this.ctx.beginPath();
 
-        for (let i = 0; i < 10; i++) {
-            this.ctx.moveTo(25, i * 50 + 25);
-            this.ctx.lineTo(25, (i + 1) * 50 + 25);
+    //     for (let i = 0; i < 10; i++) {
+    //         this.ctx.moveTo(25, i * 50 + 25);
+    //         this.ctx.lineTo(25, (i + 1) * 50 + 25);
 
-            this.ctx.moveTo(i * 50 + 25, 25);
-            this.ctx.lineTo((i + 1) * 50 + 25, 25);
-        }
-        this.ctx.stroke();
-    }
+    //         this.ctx.moveTo(i * 50 + 25, 25);
+    //         this.ctx.lineTo((i + 1) * 50 + 25, 25);
+    //     }
+    //     this.ctx.stroke();
+    // }
 
-    drawMaze() {
-        // let drawer = 
-        this.ctx.beginPath();
-        for (let y of Object.keys(this.maze.hWallsHash)) {
-            for (let x of this.maze.hWallsHash[y]) {
-                this.ctx.moveTo(x[0], y);
-                this.ctx.lineTo(x[1], y);
-            }
-        }
+    // drawMaze() {
+    //     // let drawer = 
+    //     this.ctx.beginPath();
+    //     for (let y of Object.keys(this.maze.hWallsHash)) {
+    //         for (let x of this.maze.hWallsHash[y]) {
+    //             this.ctx.moveTo(x[0], y);
+    //             this.ctx.lineTo(x[1], y);
+    //         }
+    //     }
 
-        for (let x of Object.keys(this.maze.vWallsHash)) {
-            for (let y of this.maze.vWallsHash[x]) {
-                this.ctx.moveTo(x, y[0]);
-                this.ctx.lineTo(x, y[1]);
-            }
-        }
-        this.ctx.stroke();
-    }
+    //     for (let x of Object.keys(this.maze.vWallsHash)) {
+    //         for (let y of this.maze.vWallsHash[x]) {
+    //             this.ctx.moveTo(x, y[0]);
+    //             this.ctx.lineTo(x, y[1]);
+    //         }
+    //     }
+    //     this.ctx.stroke();
+    // }
 
     drawMaze3() {
         // let drawer = 
         this.ctx.beginPath();
         // let i = 0;
-        this.maze.rotateRad -= Math.PI/800;
+        if (this.rotateRad != this.targetRad) {
+            if (this.rotateRad > this.targetRad) {
+                this.rotateRad -= Math.PI / 800;
+            } else {
+                this.rotateRad += Math.PI / 800;
+            }
+        }
         this.maze.rotateClockwiseBit();
         for (let c of this.maze.transitionWalls) {
 

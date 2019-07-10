@@ -21,6 +21,7 @@ class Sprite {
         this.rotateRad = 0;
         this.targetRad = 0;
         this.speed = 2;
+        this.offset = 113.91;
     }
 
     update(keys) {
@@ -191,8 +192,8 @@ class Sprite {
             this.sy,
             this.width,
             this.height,
-            this.dxR,
-            this.dyR,
+            this.dxR + this.offset,
+            this.dyR + this.offset,
             this.width,
             this.height
         );

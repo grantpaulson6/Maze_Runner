@@ -7,6 +7,7 @@ class Maze {
         
         this.hWalls = new Set();
         this.vWalls = new Set();
+        this.offset = 113.91;
 
         for (let r = 0; r < 10; r++) {
             for (let c = 0; c < 10; c++) {
@@ -212,8 +213,8 @@ class Maze {
         }
         this.rotateClockwiseBit();
         for (let c of this.transitionWalls) {
-            this.ctx.moveTo(c[0][0], c[0][1]);
-            this.ctx.lineTo(c[1][0], c[1][1]);
+            this.ctx.moveTo(c[0][0] + this.offset, c[0][1] + this.offset);
+            this.ctx.lineTo(c[1][0] + this.offset, c[1][1] + this.offset);
         }
         this.ctx.stroke();
     }

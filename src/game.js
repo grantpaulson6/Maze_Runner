@@ -42,7 +42,7 @@ class Game {
     }
 
     animate() {
-        this.ctx.clearRect(0,0,550,550);
+        this.ctx.clearRect(0,0,778,778);
         this.player.update(this.keys);
         this.maze.drawMaze();
         this.player.render();

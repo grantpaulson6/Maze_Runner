@@ -30,8 +30,8 @@ class Maze {
         this.last = [];
         this.nextNode(this.rootNode, visited,0);
         console.log(this.last);
-        this.last[0] = this.last[0]*50+25+this.offset;
-        this.last[1] = this.last[1]*50+25+this.offset;
+        this.last[0] = this.last[0]*50+50;
+        this.last[1] = this.last[1]*50+50;
         
         this.hWallsArray = [];
         this.vWallsArray = [];
@@ -252,15 +252,17 @@ class Maze {
     }
 
     drawLadder() {
-
+        let [x,y] = this.rotatePoint(this.last[1]-275,this.last[0]-275);
+        // let x = this.last[1];
+        // let y = this.last[0];
         this.ctx.drawImage(
             this.ladderImage,
             0,
             0,
             64,
             64,
-            this.last[1]-7,
-            this.last[0]-20,
+            x - 32 + this.offset,
+            y - 48 + this.offset,
             64,
             64
         );

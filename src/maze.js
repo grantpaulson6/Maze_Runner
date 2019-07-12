@@ -16,6 +16,9 @@ class Maze {
             }
         }
 
+        this.ladderImage = new Image();
+        this.ladderImage.src = "../sprite_sheets/ladder.png";
+
         this.rootNode = new Node(0,0);
         const visited = new Set();
 
@@ -26,6 +29,10 @@ class Maze {
         this.d = 0;
         this.last = [];
         this.nextNode(this.rootNode, visited,0);
+        console.log(this.last);
+        this.last[0] = this.last[0]*50+25+this.offset;
+        this.last[1] = this.last[1]*50+25+this.offset;
+        
         this.hWallsArray = [];
         this.vWallsArray = [];
         this.hWallsHash = {};
@@ -221,6 +228,7 @@ class Maze {
         this.ctx.arc(275 + this.offset, 275 + this.offset, 250 + this.offset, 0, 2 * Math.PI);
         this.ctx.stroke();
         this.drawTriangle();
+        this.drawLadder();
     }
 
     drawTriangle() {
@@ -241,6 +249,21 @@ class Maze {
         this.ctx.lineTo(xc + this.offset, yc + this.offset);
         this.ctx.lineTo(xa + this.offset, ya + this.offset);
         this.ctx.fill();
+    }
+
+    drawLadder() {
+
+        this.ctx.drawImage(
+            this.ladderImage,
+            0,
+            0,
+            64,
+            64,
+            this.last[1]-7,
+            this.last[0]-20,
+            64,
+            64
+        );
     }
 
     rotatePoint(xi,yi) {

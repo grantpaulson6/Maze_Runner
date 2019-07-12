@@ -166,8 +166,8 @@ class Maze {
                     let yi = y - 275;
                     let xi = x - 275;
                     if (xi == 0) xi = 0.00000001;
-                    let theta = Math.atan2(yi,xi) - this.rotateRad;
-                    let r = Math.sqrt(xi**2 + yi**2);
+                    theta = Math.atan2(yi,xi) - this.rotateRad;
+                    r = Math.sqrt(xi**2 + yi**2);
     
                     yi = r * Math.sin(theta);
                     xi = r * Math.cos(theta);
@@ -217,6 +217,43 @@ class Maze {
             this.ctx.lineTo(c[1][0] + this.offset, c[1][1] + this.offset);
         }
         this.ctx.stroke();
+        this.ctx.beginPath();
+        this.ctx.arc(275 + this.offset, 275 + this.offset, 250 + this.offset, 0, 2 * Math.PI);
+        this.ctx.stroke();
+        this.drawTriangle();
+    }
+
+    drawTriangle() {
+        let x1 = 0;
+        let y1 = - 275 - 50;
+        let x2 = - 50;
+        let y2 = - 275;
+        let x3 = + 50;
+        let y3 = - 275;
+
+        let [xa, ya] = this.rotatePoint(x1, y1);
+        let [xb, yb] = this.rotatePoint(x2, y2);
+        let [xc, yc] = this.rotatePoint(x3, y3);
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(xa + this.offset, ya + this.offset);
+        this.ctx.lineTo(xb + this.offset, yb + this.offset);
+        this.ctx.lineTo(xc + this.offset, yc + this.offset);
+        this.ctx.lineTo(xa + this.offset, ya + this.offset);
+        this.ctx.fill();
+    }
+
+    rotatePoint(xi,yi) {
+        if (xi == 0) xi = 0.00000001;
+        let theta = Math.atan2(yi, xi) - this.rotateRad;
+        let r = Math.sqrt(xi ** 2 + yi ** 2);
+
+        yi = r * Math.sin(theta);
+        xi = r * Math.cos(theta);
+
+        xi += 275;
+        yi += 275;
+        return [xi, yi];
     }
 }
 

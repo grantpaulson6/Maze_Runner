@@ -13,9 +13,24 @@ class Game {
             ctx: this.ctx,
             width: 32,
             height: 48,
+            speed: 2,
             image: playerImage,
             hWalls: this.maze.hWallsHash,
-            vWalls: this.maze.vWallsHash
+            vWalls: this.maze.vWallsHash,
+            dx: 27,
+            dy: 23
+        });
+
+        const clownImage = new Image();
+        clownImage.src = "../sprite_sheets/clown.png";
+        this.clown = new Sprite({
+            ctx: this.ctx,
+            width: 48,
+            height: 64,
+            speed: 1,
+            image: clownImage,
+            dx: 19,
+            dy: 1
         });
 
         this.keys = {};
@@ -37,15 +52,18 @@ class Game {
         let p = Math.PI/2;
         let rad = [-2*p, -p, p, 2*p][Math.floor(Math.random()*4)];
         this.player.targetRad = rad;
+        this.clown.targetRad = rad;
         this.maze.targetRad = rad;
         window.setTimeout(this.rotate.bind(this), 10000);
     }
 
     animate() {
         this.ctx.clearRect(0,0,778,778);
-        this.player.update(this.keys);
+        this.player.move(this.keys);
+        this.clown.clownMove(this.maze.correctPath);
         this.maze.drawMaze();
         this.player.render();
+        this.clown.render();
         window.requestAnimationFrame(this.animate.bind(this));
     }
 }

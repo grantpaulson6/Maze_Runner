@@ -9,29 +9,25 @@ class Sprite {
         this.image = options.image;
         this.hWalls = options.hWalls;
         this.vWalls = options.vWalls;
+        this.path =  options.path;
+        this.speed = options.speed;
+
         this.sx = 0;
         this.sy = 0;
-        this.dx = 27;
-        this.dy = 23;
-        this.dxR = 27;
-        this.dyR = 23;
+        this.dx = options.dx;
+        this.dy = options.dy;
+        this.dxR = options.dx;
+        this.dyR = options.dy;
         this.m = 0;
-        // this.oreintation('l');
+
+        //clown thing
+        this.location = 1;
+
+
         this.tickCount = 0;
         this.rotateRad = 0;
         this.targetRad = 0;
-        this.speed = 2;
         this.offset = 113.91;
-    }
-
-    update(keys) {
-        this.move(keys);
-        // this.tickCount += 1
-        // if (this.tickCount > 10) {
-        //     this.tickCount = 0
-        //     this.sx += this.width;
-        //     if (this.sx == this.width * 4) this.sx = 0;
-        // }
     }
 
     move(keys) {
@@ -53,7 +49,6 @@ class Sprite {
         if (keys[38]) {
             if (this.m != 3) {
                 this.m = 3;
-                // this.sy = this.m * this.height;
             }
             this.dy -= this.speed;
             if (this.checkPoint()) this.dy += this.speed;
@@ -62,7 +57,6 @@ class Sprite {
         if (keys[39]) {
             if (this.m != 2) {
                 this.m = 2;
-                // this.sy = this.m * this.height;
             }
             this.dx += this.speed;
             if (this.checkPoint()) this.dx -= this.speed;
@@ -72,7 +66,6 @@ class Sprite {
         if (keys[40]) {
             if (this.m != 0) {
                 this.m = 0;
-                // this.sy = this.m * this.height;
             }
             this.dy += this.speed;
             if (this.checkPoint()) this.dy -= this.speed;
@@ -82,7 +75,6 @@ class Sprite {
         if (keys[37]) {
             if (this.m != 1) {
                 this.m = 1;
-                // this.sy = this.m * this.height;
             }
             this.dx -= this.speed;       
             if (this.checkPoint()) this.dx += this.speed;                        
@@ -91,12 +83,45 @@ class Sprite {
         this.sy = this.orientate() * this.height;
     }
 
+    clownMove(path) {
+        if (!this.path) {
+            this.path = path;
+            this.deltaY = this.path[this.location][0] - this.path[this.location - 1][0];
+            this.deltaX = this.path[this.location][1] - this.path[this.location - 1][1];
+        }
+        this.tickCount += 1;
+
+        if (this.tickCount % 10 == 0) {
+            this.sx += this.width;
+            if (this.sx == this.width * 4) this.sx = 0;
+        }
+
+        if (this.tickCount == 51) {
+            this.tickCount = 1;
+            this.location++;
+            this.deltaY = this.path[this.location][0] - this.path[this.location - 1][0];
+            this.deltaX = this.path[this.location][1] - this.path[this.location - 1][1];
+        }
+
+        this.dx += this.deltaX;
+        this.dy += this.deltaY;
+
+        if (this.deltaY == -1 && this.m != 3) {
+            this.m = 3;
+        } else if (this.deltaX == 1 && this.m != 2) {
+            this.m = 2;
+        } else if (this.deltaY == 1 && this.m != 0) {
+            this.m = 0;
+        } else if (this.deltaX == -1 && this.m != 1) {
+            this.m = 1;
+        }
+
+        this.sy = this.orientate() * this.height;
+
+    }
+
     orientate() {
-        // debugger
-        //counter clockwise is positive radian or this.rotateRad
         let dir = [0,2,3,1];
-        //rotate offset by pi/4
-        // debugger
         let offset = Math.floor(2* ((this.rotateRad+Math.PI/4) % (Math.PI *2))/ Math.PI);
         switch(this.m) {
             case 1:

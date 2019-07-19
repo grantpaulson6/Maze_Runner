@@ -5,6 +5,8 @@ class Game {
 
     constructor(canvas) {
         this.ctx = canvas.getContext('2d');
+
+        // adding starting ladder location to this
         this.maze = new Maze(this.ctx);
 
         const playerImage = new Image();
@@ -34,6 +36,7 @@ class Game {
         });
 
         this.keys = {};
+        this.count = 0;
 
         window.addEventListener('keydown', e => {
             this.keys[e.keyCode] = true;
@@ -45,7 +48,7 @@ class Game {
 
         window.requestAnimationFrame(this.animate.bind(this));
 
-        window.setTimeout(this.rotate.bind(this), 3000)
+        window.setTimeout(this.rotate.bind(this), 3000);
     }
 
     rotate() {
@@ -58,12 +61,15 @@ class Game {
     }
 
     animate() {
+        this.count++;
         this.ctx.clearRect(0,0,778,778);
         this.player.move(this.keys);
-        this.clown.clownMove(this.maze.correctPath);
         this.maze.drawMaze();
         this.player.render();
-        this.clown.render();
+        if (this.count > 100) {
+            this.clown.clownMove(this.maze.correctPath);
+            this.clown.render();
+        }
         window.requestAnimationFrame(this.animate.bind(this));
     }
 }

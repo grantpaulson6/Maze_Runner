@@ -12,6 +12,7 @@ class Sprite {
         this.vWalls = options.vWalls;
         this.path =  options.path;
         this.speed = options.speed;
+        this.rotationSpeed = options.rotationSpeed;
 
         this.sx = 0;
         this.sy = 0;
@@ -46,6 +47,8 @@ class Sprite {
         this.hWalls = options.hWalls;
         this.vWalls = options.vWalls;
         this.path = options.path;
+        if (options.speed) this.speed = options.speed;
+        if (options.rotationSpeed)  this.rotationSpeed = options.rotationSpeed;
     }
 
 
@@ -110,20 +113,22 @@ class Sprite {
         }
         this.tickCount += 1;
 
-        if (this.tickCount % 10 == 0) {
+        if (this.tickCount % Math.ceil(10/this.speed) == 0) {
             this.sx += this.width;
             if (this.sx == this.width * 4) this.sx = 0;
         }
 
-        if (this.tickCount == 51) {
+
+
+        if (this.tickCount >= 51 / this.speed) {
             this.tickCount = 1;
             this.location++;
             this.deltaY = this.path[this.location][0] - this.path[this.location - 1][0];
             this.deltaX = this.path[this.location][1] - this.path[this.location - 1][1];
         }
 
-        this.dx += this.deltaX;
-        this.dy += this.deltaY;
+        this.dx += this.deltaX * this.speed;
+        this.dy += this.deltaY * this.speed;
 
         if (this.deltaY == -1 && this.m != 3) {
             this.m = 3;
@@ -225,9 +230,9 @@ class Sprite {
         this.rotate(this.rotateRad);
         if (this.rotateRad.toFixed(6) != this.targetRad.toFixed(6)) {
             if (this.rotateRad > this.targetRad) {
-                this.rotateRad -= Math.PI / 800;
+                this.rotateRad -= Math.PI / this.rotationSpeed;
             } else {
-                this.rotateRad += Math.PI / 800;
+                this.rotateRad += Math.PI / this.rotationSpeed;
             }
         }
         this.ctx.drawImage(

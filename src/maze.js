@@ -2,12 +2,15 @@ const Node = require('./node');
 
 class Maze {
     
-    constructor(ctx) {
+    constructor(ctx, rotationSpeed) {
         this.ctx = ctx;
         
         this.hWalls = new Set();
         this.vWalls = new Set();
         this.offset = 113.91;
+
+        //fix here
+        this.rotationSpeed = rotationSpeed;
 
         for (let r = 0; r < 10; r++) {
             for (let c = 0; c < 10; c++) {
@@ -63,22 +66,15 @@ class Maze {
             }
         }
 
-        this.vWallsHash[25] = []
-        this.hWallsHash[25] = []
+        this.vWallsHash[25] = [];
+        this.hWallsHash[25] = [];
         for (let i = 0; i < 10; i++) {
             this.vWallsHash[25].push([25 + 50 * i, 25 + 50 * (i + 1)]);
             this.hWallsHash[25].push([25 + 50 * i, 25 + 50 * (i + 1)]);
         }
 
-        // left and top outer walls need to be added
-
-        
-        // console.log(this.vWallsArray.length,this.hWallsArray.length)
-        // console.log(this.last);
         this.rotateRad = 0;
         this.targetRad = 0;
-        // this.rotateClockwiseBit(this.rotateRad);
-        // this.rotateClockwiseBit(Math.PI/8);
     }
 
     deepDup(arr) {
@@ -219,9 +215,9 @@ class Maze {
         this.ctx.beginPath();
         if (this.rotateRad.toFixed(6) != this.targetRad.toFixed(6)) {
             if (this.rotateRad > this.targetRad) {
-                this.rotateRad -= Math.PI / 800;
+                this.rotateRad -= Math.PI / this.rotationSpeed;
             } else {
-                this.rotateRad += Math.PI / 800;
+                this.rotateRad += Math.PI / this.rotationSpeed;
             }
         }
         this.rotateClockwiseBit();

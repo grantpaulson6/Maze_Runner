@@ -6,9 +6,10 @@ class Game {
     constructor(canvas) {
         this.ctx = canvas.getContext('2d');
         this.newGame = false;
+        this.level = 1;
 
         // adding starting ladder location to this
-        this.maze = new Maze(this.ctx);
+        this.maze = new Maze(this.ctx, 800-50*(this.level - 1));
         // console.log(this.maze.last[1], this.maze.last[0]);
         const playerImage = new Image();
         playerImage.src = "../sprite_sheets/indianajones_whip.png";
@@ -21,7 +22,8 @@ class Game {
             hWalls: this.maze.hWallsHash,
             vWalls: this.maze.vWallsHash,
             dx: 27,
-            dy: 23
+            dy: 23,
+            rotationSpeed: 800
         });
 
         const clownImage = new Image();
@@ -33,7 +35,8 @@ class Game {
             speed: 1,
             image: clownImage,
             dx: 19,
-            dy: 1
+            dy: 1,
+            rotationSpeed: 800
         });
 
         this.keys = {};
@@ -49,7 +52,8 @@ class Game {
 
         window.requestAnimationFrame(this.animate.bind(this));
 
-        window.setTimeout(this.rotate.bind(this), 3000);
+        this.rotateTimeout = window.setTimeout(this.rotate.bind(this), 5000 - 400*(this.level - 1));
+
     }
 
     rotate() {
@@ -58,13 +62,14 @@ class Game {
         this.player.targetRad = rad;
         this.clown.targetRad = rad;
         this.maze.targetRad = rad;
-        window.setTimeout(this.rotate.bind(this), 10000);
+        clearTimeout(this.rotateTimeout);
+        this.rotateTimeout = window.setTimeout(this.rotate.bind(this), 8000 - 500*(this.level - 1));
     }
 
     animate() {
+        window.requestAnimationFrame(this.animate.bind(this));
         this.count++;
         this.ctx.clearRect(0,0,778,778);
-        // this.ctx.fillRect(this.maze.last[1] - 45 + 25, 40, this.maze.last[0] - 45 + 25, 40);
         this.player.move(this.keys);
         this.maze.drawMaze();
         this.player.render();
@@ -72,20 +77,21 @@ class Game {
             this.clown.clownMove(this.maze.correctPath);
             this.clown.render();
             if (this.clown.collide(this.player.dx, this.player.width, this.player.dy, this.player.height)) {
-                console.log('YOURE DEAD');
+                console.log(`You made it to level ${this.level}`);
             } else if (this.player.collide(this.maze.last[1]-45+25, 40, this.maze.last[0]-45+25, 40)){
-                // console.log(this.maze.last[1]-50, this.maze.last[0]-50);
-                console.log('You made it');
                 this.newGame = true;
             }
         }
         if (this.newGame) {
             this.newGame = false;
-            this.maze = new Maze(this.ctx);
-            this.player.reset({hWalls: this.maze.hWallsHash, vWalls: this.maze.vWallsHash});
-            this.clown.reset({});
+            this.level++;
+            this.maze = new Maze(this.ctx, 800 - 50 * (this.level - 1));
+            this.player.reset({ hWalls: this.maze.hWallsHash, vWalls: this.maze.vWallsHash, rotationSpeed: 800 - 50 * (this.level - 1) });
+            this.clown.reset({ speed: 1 + (this.level - 1) / 10, rotationSpeed: 800 - 50 * (this.level - 1)});
+            clearTimeout(this.rotateTimeout);
+            this.rotateTimeout = window.setTimeout(this.rotate.bind(this), 5000 - 400 * (this.level - 1));
         }
-        window.requestAnimationFrame(this.animate.bind(this));
+        // window.requestAnimationFrame(this.animate.bind(this));
     }
 }
 

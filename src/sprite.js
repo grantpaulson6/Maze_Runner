@@ -3,6 +3,7 @@
 class Sprite {
 
     constructor(options) {
+        this.options = options;
         this.ctx = options.ctx;
         this.width = options.width;
         this.height = options.height;
@@ -23,12 +24,30 @@ class Sprite {
         //clown thing
         this.location = 1;
 
-
         this.tickCount = 0;
         this.rotateRad = 0;
         this.targetRad = 0;
         this.offset = 113.91;
     }
+
+    reset(options) {
+        this.dx = this.options.dx;
+        this.dy = this.options.dy;
+        this.dxR = this.options.dx;
+        this.dyR = this.options.dy;
+        this.sx = 0;
+        this.sy = 0;
+        this.m = 0;
+        this.location = 1;
+        this.tickCount = 0;
+        this.rotateRad = 0;
+        this.targetRad = 0;
+        this.path = options.path;
+        this.hWalls = options.hWalls;
+        this.vWalls = options.vWalls;
+        this.path = options.path;
+    }
+
 
     move(keys) {
         this.tickCount += 1;

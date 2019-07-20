@@ -5,10 +5,11 @@ class Game {
 
     constructor(canvas) {
         this.ctx = canvas.getContext('2d');
+        this.newGame = false;
 
         // adding starting ladder location to this
         this.maze = new Maze(this.ctx);
-        console.log(this.maze.last[1], this.maze.last[0]);
+        // console.log(this.maze.last[1], this.maze.last[0]);
         const playerImage = new Image();
         playerImage.src = "../sprite_sheets/indianajones_whip.png";
         this.player = new Sprite({
@@ -63,6 +64,7 @@ class Game {
     animate() {
         this.count++;
         this.ctx.clearRect(0,0,778,778);
+        // this.ctx.fillRect(this.maze.last[1] - 45 + 25, 40, this.maze.last[0] - 45 + 25, 40);
         this.player.move(this.keys);
         this.maze.drawMaze();
         this.player.render();
@@ -70,11 +72,18 @@ class Game {
             this.clown.clownMove(this.maze.correctPath);
             this.clown.render();
             if (this.clown.collide(this.player.dx, this.player.width, this.player.dy, this.player.height)) {
-                alert('YOURE DEAD');
+                console.log('YOURE DEAD');
             } else if (this.player.collide(this.maze.last[1]-45+25, 40, this.maze.last[0]-45+25, 40)){
                 // console.log(this.maze.last[1]-50, this.maze.last[0]-50);
-                alert('You made it');
+                console.log('You made it');
+                this.newGame = true;
             }
+        }
+        if (this.newGame) {
+            this.newGame = false;
+            this.maze = new Maze(this.ctx);
+            this.player.reset({hWalls: this.maze.hWallsHash, vWalls: this.maze.vWallsHash});
+            this.clown.reset({});
         }
         window.requestAnimationFrame(this.animate.bind(this));
     }

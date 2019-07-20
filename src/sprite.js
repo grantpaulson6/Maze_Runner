@@ -224,11 +224,12 @@ class Sprite {
         );
     }
 
-    collide(sprite) {
-        const xCollide1 = this.dx + 8 >= sprite.dx + 8 && this.dx + 8 <= sprite.dx + sprite.width - 8;
-        const xCollide2 = this.dx + this.width - 8 >= sprite.dx + 8 && this.dx + this.width - 8 <= sprite.dx + sprite.width - 12;
-        const yCollide1 = this.dy + this.height - 32 >= sprite.dy + sprite.height - 32 && this.dy + this.height - 32 <= sprite.dy + sprite.height;
-        const yCollide2 = this.dy + this.height >= sprite.dy + sprite.height - 32 && this.dy + this.height <= sprite.dy + sprite.height;
+    // collide(sprite) {
+    collide(dx, w, dy, h) {
+        const xCollide1 = this.dx + 8 >= dx + 8 && this.dx + 8 <= dx + w - 8;
+        const xCollide2 = this.dx + this.width - 8 >= dx + 8 && this.dx + this.width - 8 <= dx + w - 12;
+        const yCollide1 = this.dy + this.height - 32 >= dy + h - 32 && this.dy + this.height - 32 <= dy + h;
+        const yCollide2 = this.dy + this.height >= dy + h - 32 && this.dy + this.height <= dy + h;
         return (xCollide1 || xCollide2) && (yCollide1 || yCollide2);
     }
 }

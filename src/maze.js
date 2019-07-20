@@ -28,7 +28,7 @@ class Maze {
         this.last = [];
         this.nextNode(this.rootNode, visited,0);
 
-        console.log(this.correctPath);
+        console.log(this.last);
         
 
         this.last[0] = this.last[0]*50+50;
@@ -259,8 +259,6 @@ class Maze {
 
     drawLadder() {
         let [x,y] = this.rotatePoint(this.last[1]-275,this.last[0]-275);
-        // let x = this.last[1];
-        // let y = this.last[0];
         this.ctx.drawImage(
             this.ladderImage,
             0,

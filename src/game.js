@@ -8,7 +8,7 @@ class Game {
 
         // adding starting ladder location to this
         this.maze = new Maze(this.ctx);
-
+        console.log(this.maze.last[1], this.maze.last[0]);
         const playerImage = new Image();
         playerImage.src = "../sprite_sheets/indianajones_whip.png";
         this.player = new Sprite({
@@ -69,8 +69,11 @@ class Game {
         if (this.count > 100) {
             this.clown.clownMove(this.maze.correctPath);
             this.clown.render();
-            if (this.clown.collide(this.player)) {
+            if (this.clown.collide(this.player.dx, this.player.width, this.player.dy, this.player.height)) {
                 alert('YOURE DEAD');
+            } else if (this.player.collide(this.maze.last[1]-45+25, 40, this.maze.last[0]-45+25, 40)){
+                // console.log(this.maze.last[1]-50, this.maze.last[0]-50);
+                alert('You made it');
             }
         }
         window.requestAnimationFrame(this.animate.bind(this));

@@ -69,6 +69,9 @@ class Game {
         if (this.count > 100) {
             this.clown.clownMove(this.maze.correctPath);
             this.clown.render();
+            if (this.clown.collide(this.player)) {
+                alert('YOURE DEAD');
+            }
         }
         window.requestAnimationFrame(this.animate.bind(this));
     }

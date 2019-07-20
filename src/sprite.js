@@ -223,6 +223,14 @@ class Sprite {
             this.height
         );
     }
+
+    collide(sprite) {
+        const xCollide1 = this.dx >= sprite.dx && this.dx <= sprite.dx + sprite.width;
+        const xCollide2 = this.dx + this.width >= sprite.dx && this.dx + this.width <= sprite.dx + sprite.width;
+        const yCollide1 = this.dy >= sprite.dy && this.dy <= sprite.dy + sprite.height;
+        const yCollide2 = this.dy + this.height >= sprite.dy && this.dy + this.height <= sprite.dy + sprite.height;
+        return (xCollide1 || xCollide2) && (yCollide1 || yCollide2);
+    }
 }
 
 module.exports = Sprite;

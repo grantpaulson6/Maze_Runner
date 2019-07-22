@@ -78,7 +78,7 @@ class Game {
             this.clown.render();
             if (this.clown.collide(this.player.dx, this.player.width, this.player.dy, this.player.height)) {
                 console.log(`You made it to level ${this.level}`);
-            } else if (this.player.collide(this.maze.last[1]-45+25, 40, this.maze.last[0]-45+25, 40)){
+            } else if (this.player.collide(this.maze.last[1]-45+25, 40, this.maze.last[0]-45+25, 30)){
                 this.newGame = true;
             }
         }

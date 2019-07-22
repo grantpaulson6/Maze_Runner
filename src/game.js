@@ -73,7 +73,7 @@ class Game {
         this.player.move(this.keys);
         this.maze.drawMaze();
         this.player.render();
-        if (this.count > 100) {
+        if (this.count > 150 - 10*(this.level-1)) {
             this.clown.clownMove(this.maze.correctPath);
             this.clown.render();
             if (this.clown.collide(this.player.dx, this.player.width, this.player.dy, this.player.height)) {
@@ -85,6 +85,7 @@ class Game {
         if (this.newGame) {
             this.newGame = false;
             this.level++;
+            this.count = 0;
             this.maze = new Maze(this.ctx, 800 - 50 * (this.level - 1));
             this.player.reset({ hWalls: this.maze.hWallsHash, vWalls: this.maze.vWallsHash, rotationSpeed: 800 - 50 * (this.level - 1) });
             this.clown.reset({ speed: 1 + (this.level - 1) / 10, rotationSpeed: 800 - 50 * (this.level - 1)});
